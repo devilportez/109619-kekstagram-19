@@ -5,8 +5,23 @@ var LIKES_AMOUNT_MIN = 15;
 var LIKES_AMOUNT_MAX = 200;
 var AVATAR_START_NUMBER = 1;
 var AVATAR_END_NUMBER = 6;
-var COMMENTS_AMOUNT_MIN = 1;
-var COMMENTS_AMOUNT_MAX = 10;
+var COMMENTS_AMOUNT_MIN = 5;
+var COMMENTS_AMOUNT_MAX = 50;
+
+var descriptions = [
+  'Я тебя не застану дома',
+  'И не встречу случайно в парке',
+  'Но письмо положу на песок',
+  'Море наш почтальон',
+  'В этом мире мне все не знакомо',
+  'День как снег безупречный, но маркий',
+  'И в любой из искомых дорог',
+  'Горе наш компаньон',
+  'Как же мог я забыть твое имя',
+  'И твой образ, достойный картин',
+  'Но я верю напишешь и ты мне',
+  'Моя лилия лилия роза жасмин'
+];
 
 var messages = [
   'Всё отлично!',
@@ -48,7 +63,7 @@ var generateData = function (elementsAmount) {
   for (var i = 0; i < elementsAmount; i++) {
     data.push({
       url: 'photos/' + (i + 1) + '.jpg',
-      description: '',
+      description: descriptions[getRandomInRange(0, descriptions.length - 1)],
       likes: getRandomInRange(LIKES_AMOUNT_MIN, LIKES_AMOUNT_MAX),
       comments: []
     });
@@ -80,3 +95,44 @@ for (var i = 0; i < generatedData.length; i++) {
 }
 
 picturesBox.appendChild(fragment);
+
+
+var bigPicture = document.querySelector('.big-picture');
+var bigPictureImage = bigPicture.querySelector('.big-picture__img img');
+var bigPictureLikesCount = bigPicture.querySelector('.likes-count');
+var bigPictureCommentsCount = bigPicture.querySelector('.comments-count');
+var bigPictureCommentsList = bigPicture.querySelector('.social__comments');
+var bigPictureDescription = bigPicture.querySelector('.social__caption');
+var bigPictureSocialCommentCount = bigPicture.querySelector('.social__comment-count');
+var bigPictureCommentsLoader = bigPicture.querySelector('.comments-loader');
+
+bigPicture.classList.remove('hidden');
+bigPictureImage.src = generatedData[0].url;
+bigPictureLikesCount.textContent = generatedData[0].likes;
+bigPictureCommentsCount.textContent = generatedData[0].comments.length;
+bigPictureDescription.textContent = generatedData[0].description;
+bigPictureCommentsList.textContent = '';
+bigPictureSocialCommentCount.classList.add('hidden');
+bigPictureCommentsLoader.classList.add('hidden');
+document.body.classList.add('modal-open');
+
+for (var j = 0; j < generatedData[0].comments.length; j++) {
+  var listItem = document.createElement('li');
+  var avatar = document.createElement('img');
+  var paragraph = document.createElement('p');
+
+  listItem.classList.add('social__comment');
+  avatar.classList.add('social__picture');
+  paragraph.classList.add('social__text');
+
+  avatar.src = generatedData[0].comments[j].avatar;
+  avatar.alt = generatedData[0].comments[j].name;
+  avatar.width = 35;
+  avatar.height = 35;
+
+  paragraph.textContent = generatedData[0].comments[j].message;
+
+  listItem.appendChild(avatar);
+  listItem.appendChild(paragraph);
+  bigPictureCommentsList.appendChild(listItem);
+}
