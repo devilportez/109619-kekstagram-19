@@ -7,6 +7,7 @@ var AVATAR_START_NUMBER = 1;
 var AVATAR_END_NUMBER = 6;
 var COMMENTS_AMOUNT_MIN = 5;
 var COMMENTS_AMOUNT_MAX = 50;
+var ESCAPE_KEY = 'Escape';
 
 var descriptions = [
   'Я тебя не застану дома',
@@ -97,42 +98,155 @@ for (var i = 0; i < generatedData.length; i++) {
 picturesBox.appendChild(fragment);
 
 
-var bigPicture = document.querySelector('.big-picture');
-var bigPictureImage = bigPicture.querySelector('.big-picture__img img');
-var bigPictureLikesCount = bigPicture.querySelector('.likes-count');
-var bigPictureCommentsCount = bigPicture.querySelector('.comments-count');
-var bigPictureCommentsList = bigPicture.querySelector('.social__comments');
-var bigPictureDescription = bigPicture.querySelector('.social__caption');
-var bigPictureSocialCommentCount = bigPicture.querySelector('.social__comment-count');
-var bigPictureCommentsLoader = bigPicture.querySelector('.comments-loader');
+// var bigPicture = document.querySelector('.big-picture');
+// var bigPictureImage = bigPicture.querySelector('.big-picture__img img');
+// var bigPictureLikesCount = bigPicture.querySelector('.likes-count');
+// var bigPictureCommentsCount = bigPicture.querySelector('.comments-count');
+// var bigPictureCommentsList = bigPicture.querySelector('.social__comments');
+// var bigPictureDescription = bigPicture.querySelector('.social__caption');
+// var bigPictureSocialCommentCount = bigPicture.querySelector('.social__comment-count');
+// var bigPictureCommentsLoader = bigPicture.querySelector('.comments-loader');
 
-bigPicture.classList.remove('hidden');
-bigPictureImage.src = generatedData[0].url;
-bigPictureLikesCount.textContent = generatedData[0].likes;
-bigPictureCommentsCount.textContent = generatedData[0].comments.length;
-bigPictureDescription.textContent = generatedData[0].description;
-bigPictureCommentsList.textContent = '';
-bigPictureSocialCommentCount.classList.add('hidden');
-bigPictureCommentsLoader.classList.add('hidden');
-document.body.classList.add('modal-open');
+// bigPicture.classList.remove('hidden');
+// bigPictureImage.src = generatedData[0].url;
+// bigPictureLikesCount.textContent = generatedData[0].likes;
+// bigPictureCommentsCount.textContent = generatedData[0].comments.length;
+// bigPictureDescription.textContent = generatedData[0].description;
+// bigPictureCommentsList.textContent = '';
+// bigPictureSocialCommentCount.classList.add('hidden');
+// bigPictureCommentsLoader.classList.add('hidden');
+// document.body.classList.add('modal-open');
 
-for (var j = 0; j < generatedData[0].comments.length; j++) {
-  var listItem = document.createElement('li');
-  var avatar = document.createElement('img');
-  var paragraph = document.createElement('p');
+// for (var j = 0; j < generatedData[0].comments.length; j++) {
+//   var listItem = document.createElement('li');
+//   var avatar = document.createElement('img');
+//   var paragraph = document.createElement('p');
 
-  listItem.classList.add('social__comment');
-  avatar.classList.add('social__picture');
-  paragraph.classList.add('social__text');
+//   listItem.classList.add('social__comment');
+//   avatar.classList.add('social__picture');
+//   paragraph.classList.add('social__text');
 
-  avatar.src = generatedData[0].comments[j].avatar;
-  avatar.alt = generatedData[0].comments[j].name;
-  avatar.width = 35;
-  avatar.height = 35;
+//   avatar.src = generatedData[0].comments[j].avatar;
+//   avatar.alt = generatedData[0].comments[j].name;
+//   avatar.width = 35;
+//   avatar.height = 35;
 
-  paragraph.textContent = generatedData[0].comments[j].message;
+//   paragraph.textContent = generatedData[0].comments[j].message;
 
-  listItem.appendChild(avatar);
-  listItem.appendChild(paragraph);
-  bigPictureCommentsList.appendChild(listItem);
-}
+//   listItem.appendChild(avatar);
+//   listItem.appendChild(paragraph);
+//   bigPictureCommentsList.appendChild(listItem);
+// }
+
+
+var uploadInput = document.querySelector('.img-upload__input');
+var uploadOverlay = document.querySelector('.img-upload__overlay');
+var uploadCancel = document.querySelector('.img-upload__cancel');
+var uploadPreviewImage = document.querySelector('.img-upload__preview img');
+var uploadEffects = document.querySelector('.img-upload__effects');
+var uploadSubmitButton = document.querySelector('.img-upload__submit');
+var effectLevelPin = document.querySelector('.effect-level__pin');
+var effectLevelLine = document.querySelector('.effect-level__line');
+
+var openUploadOverlay = function () {
+  uploadOverlay.classList.remove('hidden');
+  document.body.classList.add('modal-open');
+
+  uploadCancel.addEventListener('click', onUploadCancelClick);
+  uploadEffects.addEventListener('click', onFilterClick);
+  effectLevelPin.addEventListener('mouseup', onEffectLevelPinMouseUp);
+  document.addEventListener('keydown', onUploadCancelEscapeKeydown);
+};
+
+var closeUploadOverlay = function () {
+  uploadOverlay.classList.add('hidden');
+  document.body.classList.remove('modal-open');
+
+  uploadCancel.removeEventListener('click', onUploadCancelClick);
+  uploadEffects.removeEventListener('click', onFilterClick);
+  effectLevelPin.removeEventListener('mouseup', onEffectLevelPinMouseUp);
+  document.removeEventListener('keydown', onUploadCancelEscapeKeydown);
+  uploadInput.value = '';
+};
+
+var applyFilterToPreviewImage = function (evt) {
+  uploadPreviewImage.style.filter = null;
+
+  if (evt.target && evt.target.matches('input')) {
+    uploadPreviewImage.classList = 'effects__preview--' + evt.target.value;
+  }
+};
+
+var onUploadInputChange = function () {
+  openUploadOverlay();
+};
+
+var onUploadCancelClick = function () {
+  closeUploadOverlay();
+};
+
+var onUploadCancelEscapeKeydown = function (evt) {
+  if (evt.key === ESCAPE_KEY) {
+    closeUploadOverlay();
+  }
+};
+
+var onFilterClick = function (evt) {
+  applyFilterToPreviewImage(evt);
+};
+
+var onEffectLevelPinMouseUp = function () {
+  var currentEffect = getComputedStyle(uploadPreviewImage).getPropertyValue('filter');
+  var effectLevel = Math.floor(effectLevelPin.offsetLeft * 100 / effectLevelLine.offsetWidth);
+
+  var effects = [
+    'grayscale(1)',
+    'sepia(1)',
+    'invert(1)',
+    'blur(3px)',
+    'brightness(3)'
+  ];
+
+  var applyEffects = [
+    'grayscale(' + effectLevel / 100 + ')',
+    'sepia(' + effectLevel / 100 + ')',
+    'invert(' + effectLevel + '%)',
+    'blur(' + effectLevel * 0.03 + 'px)',
+    'brightness(' + effectLevel * 0.03 + ')'
+  ];
+
+  for (var j = 0; j < effects.length; j++) {
+    if (currentEffect === effects[j]) {
+      uploadPreviewImage.style.filter = applyEffects[j];
+    }
+  }
+};
+
+var hashtagsInput = document.querySelector('.text__hashtags');
+
+hashtagsInput.addEventListener('change', function (evt) {
+  var hashtags = evt.target.value.toLowerCase().split(' ');
+  var isNotWithSharp = false;
+  var isSharpOnly = false;
+
+  for (var j = 0; j < hashtags.length; j++) {
+    if (hashtags[j].indexOf('#') === -1) {
+      isNotWithSharp = true;
+    }
+    if (hashtags[j] === '#') {
+      isSharpOnly = true;
+    }
+  }
+
+  if (isNotWithSharp) {
+    hashtagsInput.setCustomValidity('Хэш-тег должен начинаться с решетки');
+  } else if (hashtags.length > 5) {
+    hashtagsInput.setCustomValidity('Максимальное количество хэш-тегов 5');
+  } else if (isSharpOnly) {
+    hashtagsInput.setCustomValidity('Хэш-тег не может состоять из одной решетки');
+  } else {
+    hashtagsInput.setCustomValidity('');
+  }
+});
+
+uploadInput.addEventListener('change', onUploadInputChange);
