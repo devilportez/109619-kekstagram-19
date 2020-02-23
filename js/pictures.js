@@ -5,18 +5,20 @@
   var pictureTemplate = document.querySelector('#picture').content.querySelector('.picture');
   var fragment = document.createDocumentFragment();
 
-  for (var i = 0; i < window.data.generatedData.length; i++) {
-    var picture = pictureTemplate.cloneNode(true);
-    var image = picture.querySelector('.picture__img');
-    var likesBox = picture.querySelector('.picture__likes');
-    var commentsBox = picture.querySelector('.picture__comments');
+  window.server.loadData(function (pictures) {
+    for (var i = 0; i < pictures.length; i++) {
+      var picture = pictureTemplate.cloneNode(true);
+      var image = picture.querySelector('.picture__img');
+      var likesBox = picture.querySelector('.picture__likes');
+      var commentsBox = picture.querySelector('.picture__comments');
 
-    image.src = window.data.generatedData[i].url;
-    likesBox.textContent = window.data.generatedData[i].likes;
-    commentsBox.textContent = window.data.generatedData[i].comments.length;
+      image.src = pictures[i].url;
+      likesBox.textContent = pictures[i].likes;
+      commentsBox.textContent = pictures[i].comments.length;
 
-    fragment.appendChild(picture);
-  }
+      fragment.appendChild(picture);
+    }
 
-  picturesBox.appendChild(fragment);
+    picturesBox.appendChild(fragment);
+  });
 })();
