@@ -8,7 +8,7 @@
   var renderPictures = function (data) {
     var pictures = document.querySelectorAll('.picture');
 
-    if (pictures.length > 0) {
+    if (pictures.length) {
       pictures.forEach(function (picture) {
         picture.remove();
       });
