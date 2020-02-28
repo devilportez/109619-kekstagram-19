@@ -37,12 +37,9 @@
     var onFilterClick = function (evt) {
       if (evt.target && evt.target.matches('.img-filters__button')) {
         var target = evt.target;
-        var buttons = filter.querySelectorAll('.img-filters__button');
+        var activeButton = filter.querySelector('.img-filters__button--active');
 
-        buttons.forEach(function (button) {
-          button.classList.remove('img-filters__button--active');
-        });
-
+        activeButton.classList.remove('img-filters__button--active');
         target.classList.add('img-filters__button--active');
 
         window.debounce.set(function () {

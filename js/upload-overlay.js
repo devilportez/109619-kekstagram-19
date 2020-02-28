@@ -66,7 +66,7 @@
   };
 
   var onUploadCancelEscapeKeydown = function (evt) {
-    if (evt.key === ESCAPE_KEY) {
+    if (evt.key === ESCAPE_KEY && !(evt.target.matches('input') || evt.target.matches('textarea'))) {
       closeUploadOverlay();
     }
   };
