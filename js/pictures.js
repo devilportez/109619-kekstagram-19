@@ -20,10 +20,15 @@
       var likesBox = pictureNode.querySelector('.picture__likes');
       var commentsBox = pictureNode.querySelector('.picture__comments');
 
+      var onPictureClick = function () {
+        window.bigPictureOverlay.render(picture);
+      };
+
       image.src = picture.url;
       likesBox.textContent = picture.likes;
       commentsBox.textContent = picture.comments.length;
 
+      pictureNode.addEventListener('click', onPictureClick);
       fragment.appendChild(pictureNode);
     });
 
