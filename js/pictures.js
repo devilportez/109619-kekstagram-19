@@ -5,20 +5,36 @@
   var pictureTemplate = document.querySelector('#picture').content.querySelector('.picture');
   var fragment = document.createDocumentFragment();
 
-  window.server.loadData(function (pictures) {
-    for (var i = 0; i < pictures.length; i++) {
-      var picture = pictureTemplate.cloneNode(true);
-      var image = picture.querySelector('.picture__img');
-      var likesBox = picture.querySelector('.picture__likes');
-      var commentsBox = picture.querySelector('.picture__comments');
+  var renderPictures = function (data) {
+    var pictures = document.querySelectorAll('.picture');
 
-      image.src = pictures[i].url;
-      likesBox.textContent = pictures[i].likes;
-      commentsBox.textContent = pictures[i].comments.length;
-
-      fragment.appendChild(picture);
+    if (pictures.length > 0) {
+      pictures.forEach(function (picture) {
+        picture.remove();
+      });
     }
 
+    data.forEach(function (picture) {
+      var pictureNode = pictureTemplate.cloneNode(true);
+      var image = pictureNode.querySelector('.picture__img');
+      var likesBox = pictureNode.querySelector('.picture__likes');
+      var commentsBox = pictureNode.querySelector('.picture__comments');
+
+      image.src = picture.url;
+      likesBox.textContent = picture.likes;
+      commentsBox.textContent = picture.comments.length;
+
+      fragment.appendChild(pictureNode);
+    });
+
     picturesBox.appendChild(fragment);
+  };
+
+  window.server.loadData(function (pictures) {
+    renderPictures(pictures);
   });
+
+  window.pictures = {
+    render: renderPictures
+  };
 })();
