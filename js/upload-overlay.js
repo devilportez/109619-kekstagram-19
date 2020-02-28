@@ -2,6 +2,7 @@
 
 (function () {
   var ESCAPE_KEY = 'Escape';
+  var FILE_TYPES = ['png', 'jpg', 'jpeg', 'gif'];
 
   var uploadInput = document.querySelector('.img-upload__input');
   var uploadOverlay = document.querySelector('.img-upload__overlay');
@@ -29,6 +30,7 @@
     effectLevelPin.removeEventListener('mouseup', onEffectLevelPinMouseUp);
     document.removeEventListener('keydown', onUploadCancelEscapeKeydown);
     uploadInput.value = null;
+    uploadPreviewImage.classList = 'effects__preview--none';
   };
 
   var applyFilterToPreviewImage = function (evt) {
@@ -40,7 +42,23 @@
   };
 
   var onUploadInputChange = function () {
-    openUploadOverlay();
+    var file = uploadInput.files[0];
+    var fileName = file.name.toLowerCase();
+
+    var matches = FILE_TYPES.some(function (type) {
+      return fileName.endsWith(type);
+    });
+
+    if (matches) {
+      var fileReader = new FileReader();
+
+      fileReader.addEventListener('load', function () {
+        uploadPreviewImage.src = fileReader.result;
+        openUploadOverlay();
+      });
+
+      fileReader.readAsDataURL(file);
+    }
   };
 
   var onUploadCancelClick = function () {
