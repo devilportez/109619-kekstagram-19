@@ -4,14 +4,12 @@
   var ESCAPE_KEY = 'Escape';
   var FILE_TYPES = ['png', 'jpg', 'jpeg', 'gif'];
 
-  var main = document.querySelector('main');
   var uploadInput = document.querySelector('.img-upload__input');
   var uploadOverlay = document.querySelector('.img-upload__overlay');
   var uploadForm = document.querySelector('.img-upload__form');
   var uploadCancel = uploadOverlay.querySelector('.img-upload__cancel');
   var uploadPreviewImage = uploadOverlay.querySelector('.img-upload__preview img');
   var uploadEffects = uploadOverlay.querySelector('.img-upload__effects');
-  // var uploadSubmit = uploadOverlay.querySelector('.img-upload__submit');
   var effectLevelPin = uploadOverlay.querySelector('.effect-level__pin');
   var effectLevelLine = uploadOverlay.querySelector('.effect-level__line');
   var effectLevelDepth = uploadOverlay.querySelector('.effect-level__depth');
@@ -20,16 +18,6 @@
 
   var openUploadOverlay = function () {
     window.overlay.open(uploadOverlay);
-
-    uploadCancel.addEventListener('click', onUploadCancelClick);
-    uploadEffects.addEventListener('click', onFilterClick);
-    effectLevelPin.addEventListener('mousedown', onEffectLevelPinMouseDown);
-    document.addEventListener('keydown', onUploadCancelEscapeKeydown);
-
-    uploadForm.addEventListener('submit', function (evt) {
-      evt.preventDefault();
-      window.server.sendData(new FormData(uploadForm), onSuccessSubmit, onErrorSubmit);
-    });
   };
 
   var onSuccessSubmit = function () {
@@ -38,10 +26,8 @@
   };
 
   var onErrorSubmit = function () {
-    var errorTemplate = document.querySelector('#error').content.querySelector('.error');
-
-    main.appendChild(errorTemplate);
-    uploadOverlay.classList.add('hidden');
+    closeUploadOverlay();
+    window.message.render('error');
   };
 
   var closeUploadOverlay = function () {
@@ -173,6 +159,16 @@
     } else {
       hashtagsInput.setCustomValidity('');
     }
+  });
+
+  uploadCancel.addEventListener('click', onUploadCancelClick);
+  uploadEffects.addEventListener('click', onFilterClick);
+  effectLevelPin.addEventListener('mousedown', onEffectLevelPinMouseDown);
+  document.addEventListener('keydown', onUploadCancelEscapeKeydown);
+
+  uploadForm.addEventListener('submit', function (evt) {
+    evt.preventDefault();
+    window.server.sendData(new FormData(uploadForm), onSuccessSubmit, onErrorSubmit);
   });
 
   uploadInput.addEventListener('change', onUploadInputChange);

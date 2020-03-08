@@ -4,6 +4,8 @@
   window.server.loadData(function (pictures) {
     var filter = document.querySelector('.img-filters');
 
+    window.pictures.render(pictures);
+
     var filterByDefault = function () {
       window.pictures.render(pictures);
     };
