@@ -35,10 +35,6 @@
     picturesBox.appendChild(fragment);
   };
 
-  window.server.loadData(function (pictures) {
-    renderPictures(pictures);
-  });
-
   window.pictures = {
     render: renderPictures
   };
