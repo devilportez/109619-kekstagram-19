@@ -29,6 +29,7 @@
       commentsBox.textContent = picture.comments.length;
 
       pictureNode.addEventListener('click', onPictureClick);
+
       fragment.appendChild(pictureNode);
     });
 

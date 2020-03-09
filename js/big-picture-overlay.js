@@ -2,7 +2,8 @@
 
 (function () {
   var ESCAPE_KEY = 'Escape';
-  var COMMENTS_VISIBLE_AMOUNT = 5;
+  var VISIBLE_COMMENTS_AMOUNT = 5;
+  var AVATAR_SIZE = 35;
 
   var bigPicture = document.querySelector('.big-picture');
   var bigPictureImage = bigPicture.querySelector('.big-picture__img img');
@@ -14,7 +15,7 @@
   var bigPictureCommentsLoader = bigPicture.querySelector('.comments-loader');
 
   var renderBigPictureOverlay = function (data) {
-    var lastShowedCommentsIndex = COMMENTS_VISIBLE_AMOUNT;
+    var lastShowedCommentsIndex = VISIBLE_COMMENTS_AMOUNT;
 
     var bigPictureClose = bigPicture.querySelector('.big-picture__cancel');
 
@@ -36,8 +37,8 @@
     };
 
     var onCommentLoaderClick = function () {
-      renderComment(data.comments, lastShowedCommentsIndex, lastShowedCommentsIndex + COMMENTS_VISIBLE_AMOUNT);
-      lastShowedCommentsIndex += COMMENTS_VISIBLE_AMOUNT;
+      renderComment(data.comments, lastShowedCommentsIndex, lastShowedCommentsIndex + VISIBLE_COMMENTS_AMOUNT);
+      lastShowedCommentsIndex += VISIBLE_COMMENTS_AMOUNT;
     };
 
     var renderComment = function (comments, startIndex, lastIndex) {
@@ -52,8 +53,8 @@
 
         avatar.src = comment.avatar;
         avatar.alt = comment.name;
-        avatar.width = 35;
-        avatar.height = 35;
+        avatar.width = AVATAR_SIZE;
+        avatar.height = AVATAR_SIZE;
         paragraph.textContent = comment.message;
 
         listItem.appendChild(avatar);

@@ -38,6 +38,7 @@
     });
 
     xhr.timeout = 10000;
+
     xhr.open('POST', url);
     xhr.send(data);
   };
