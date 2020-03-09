@@ -7,6 +7,7 @@
   var SCALE_STEP = 25;
   var HASHTAG_MAX_LENGTH = 20;
   var HASHTAGS_MAX_AMOUNT = 5;
+  var HASHTAGS_REGEXP = /^#[A-Za-zА-Яа-я0-9]+$/;
   var FILE_TYPES = ['png', 'jpg', 'jpeg', 'gif'];
 
   var uploadInput = document.querySelector('.img-upload__input');
@@ -227,7 +228,7 @@
         hasError = true;
         break;
       }
-      if (!(/^#[A-Za-zА-Яа-я0-9]+$/gi).test(hashtags[i])) {
+      if (!HASHTAGS_REGEXP.test(hashtags[i])) {
         renderHashtagsInputError('Хэш-тег может состоять только из букв и цифр', errorFieldStyle);
         hasError = true;
         break;

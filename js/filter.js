@@ -1,27 +1,34 @@
 'use strict';
 
 (function () {
+  var RANDOMIZE_NUMBER = 0.5;
+  var RANDOM_PICTURES_AMOUNT = 10;
+
   window.server.loadData(function (pictures) {
     var filter = document.querySelector('.img-filters');
 
     window.pictures.render(pictures);
+
+    var copyPictures = function () {
+      return pictures.slice();
+    };
 
     var filterByDefault = function () {
       window.pictures.render(pictures);
     };
 
     var filterRandom = function () {
-      var picturesCopy = pictures.slice();
+      var picturesCopy = copyPictures();
 
       picturesCopy.sort(function () {
-        return 0.5 - Math.random();
+        return RANDOMIZE_NUMBER - Math.random();
       });
 
-      window.pictures.render(picturesCopy.slice(0, 10));
+      window.pictures.render(picturesCopy.slice(0, RANDOM_PICTURES_AMOUNT));
     };
 
     var filterByPopular = function () {
-      var picturesCopy = pictures.slice();
+      var picturesCopy = copyPictures();
 
       picturesCopy.sort(function (first, second) {
         return second.comments.length - first.comments.length;
