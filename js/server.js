@@ -6,14 +6,16 @@
   var SUCCESS_CODE = 200;
 
   var createXHR = function () {
-    return new XMLHttpRequest();
+    var xhr = new XMLHttpRequest();
+
+    xhr.responseType = 'json';
+
+    return xhr;
   };
 
   var loadData = function (onSuccess) {
     var xhr = createXHR();
     var url = URL + '/data';
-
-    xhr.responseType = 'json';
 
     xhr.addEventListener('load', function () {
       onSuccess(xhr.response);
@@ -25,8 +27,6 @@
 
   var sendData = function (data, onSuccess, onError) {
     var xhr = createXHR();
-
-    xhr.responseType = 'json';
 
     xhr.addEventListener('load', function () {
       if (xhr.status === SUCCESS_CODE) {
